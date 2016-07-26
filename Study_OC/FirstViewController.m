@@ -205,8 +205,26 @@ NSInteger intSort(id num1, id num2, void *context)
     NSArray *array = [[sortArray copy] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     
     NSMutableString *arrayString = [NSMutableString new];
+
+#pragma mark 数组的遍历
+    //数组的遍历
+    {//1,
     for (MUser *user in array) {
         [arrayString appendString:[NSString stringWithFormat:@"%ld,",(long)user.age]];
+    }
+    
+    //2,
+//    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        NSLog(@"%@\n",obj);
+//    }];
+    
+    //3,
+//    NSEnumerator *enumerator = [array objectEnumerator];
+//    id obj;
+//    //注意：遍历期间不能添加或删除对象
+//    while(obj = [enumerator nextObject]){
+//        NSLog(@"%@\n",obj);
+//    }
     }
     NSLog(@"\nsortArray:%@\narray:%@",sortArrayString,arrayString);
 }
@@ -219,6 +237,7 @@ NSInteger intSort(id num1, id num2, void *context)
     //filteredArrayUsingPredicate
     NSArray *array=[filterArray filteredArrayUsingPredicate:predicate];
     NSLog(@"\nfilterArray:%@,\narray:%@",filterArray,array);
+    
 }
 
 - (void)didReceiveMemoryWarning {
