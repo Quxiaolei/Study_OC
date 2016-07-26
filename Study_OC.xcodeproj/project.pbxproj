@@ -17,6 +17,9 @@
 		253769EC1D30ECD5001482D5 /* Study_OCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 253769EB1D30ECD5001482D5 /* Study_OCTests.m */; };
 		253769F71D30ECD6001482D5 /* Study_OCUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 253769F61D30ECD6001482D5 /* Study_OCUITests.m */; };
 		25376A061D30F525001482D5 /* FirstViewControllerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 25376A051D30F525001482D5 /* FirstViewControllerModel.m */; };
+		2545860C1D473075007C5FF7 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2545860B1D473075007C5FF7 /* ShareViewController.m */; };
+		2545860F1D473075007C5FF7 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2545860D1D473075007C5FF7 /* MainInterface.storyboard */; };
+		254586131D473075007C5FF7 /* ShareMenu.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 254586081D473075007C5FF7 /* ShareMenu.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +37,28 @@
 			remoteGlobalIDString = 253769CA1D30ECD5001482D5;
 			remoteInfo = Study_OC;
 		};
+		254586111D473075007C5FF7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 253769C31D30ECD5001482D5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 254586071D473075007C5FF7;
+			remoteInfo = ShareMenu;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		254586171D473075007C5FF7 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				254586131D473075007C5FF7 /* ShareMenu.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		253769CB1D30ECD5001482D5 /* Study_OC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Study_OC.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +81,11 @@
 		253769F81D30ECD6001482D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25376A041D30F525001482D5 /* FirstViewControllerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewControllerModel.h; sourceTree = "<group>"; };
 		25376A051D30F525001482D5 /* FirstViewControllerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewControllerModel.m; sourceTree = "<group>"; };
+		254586081D473075007C5FF7 /* ShareMenu.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareMenu.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2545860A1D473075007C5FF7 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		2545860B1D473075007C5FF7 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		2545860E1D473075007C5FF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		254586101D473075007C5FF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +110,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		254586051D473075007C5FF7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -90,6 +126,7 @@
 				253769CD1D30ECD5001482D5 /* Study_OC */,
 				253769EA1D30ECD5001482D5 /* Study_OCTests */,
 				253769F51D30ECD6001482D5 /* Study_OCUITests */,
+				254586091D473075007C5FF7 /* ShareMenu */,
 				253769CC1D30ECD5001482D5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,6 +137,7 @@
 				253769CB1D30ECD5001482D5 /* Study_OC.app */,
 				253769E71D30ECD5001482D5 /* Study_OCTests.xctest */,
 				253769F21D30ECD6001482D5 /* Study_OCUITests.xctest */,
+				254586081D473075007C5FF7 /* ShareMenu.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,6 +188,17 @@
 			path = Study_OCUITests;
 			sourceTree = "<group>";
 		};
+		254586091D473075007C5FF7 /* ShareMenu */ = {
+			isa = PBXGroup;
+			children = (
+				2545860A1D473075007C5FF7 /* ShareViewController.h */,
+				2545860B1D473075007C5FF7 /* ShareViewController.m */,
+				2545860D1D473075007C5FF7 /* MainInterface.storyboard */,
+				254586101D473075007C5FF7 /* Info.plist */,
+			);
+			path = ShareMenu;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -160,10 +209,12 @@
 				253769C71D30ECD5001482D5 /* Sources */,
 				253769C81D30ECD5001482D5 /* Frameworks */,
 				253769C91D30ECD5001482D5 /* Resources */,
+				254586171D473075007C5FF7 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				254586121D473075007C5FF7 /* PBXTargetDependency */,
 			);
 			name = Study_OC;
 			productName = Study_OC;
@@ -206,6 +257,23 @@
 			productReference = 253769F21D30ECD6001482D5 /* Study_OCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		254586071D473075007C5FF7 /* ShareMenu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 254586161D473075007C5FF7 /* Build configuration list for PBXNativeTarget "ShareMenu" */;
+			buildPhases = (
+				254586041D473075007C5FF7 /* Sources */,
+				254586051D473075007C5FF7 /* Frameworks */,
+				254586061D473075007C5FF7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareMenu;
+			productName = ShareMenu;
+			productReference = 254586081D473075007C5FF7 /* ShareMenu.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -225,6 +293,9 @@
 						CreatedOnToolsVersion = 7.3.1;
 						TestTargetID = 253769CA1D30ECD5001482D5;
 					};
+					254586071D473075007C5FF7 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 				};
 			};
 			buildConfigurationList = 253769C61D30ECD5001482D5 /* Build configuration list for PBXProject "Study_OC" */;
@@ -243,6 +314,7 @@
 				253769CA1D30ECD5001482D5 /* Study_OC */,
 				253769E61D30ECD5001482D5 /* Study_OCTests */,
 				253769F11D30ECD6001482D5 /* Study_OCUITests */,
+				254586071D473075007C5FF7 /* ShareMenu */,
 			);
 		};
 /* End PBXProject section */
@@ -269,6 +341,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		254586061D473075007C5FF7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2545860F1D473075007C5FF7 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +383,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		254586041D473075007C5FF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2545860C1D473075007C5FF7 /* ShareViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -315,6 +403,11 @@
 			isa = PBXTargetDependency;
 			target = 253769CA1D30ECD5001482D5 /* Study_OC */;
 			targetProxy = 253769F31D30ECD6001482D5 /* PBXContainerItemProxy */;
+		};
+		254586121D473075007C5FF7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 254586071D473075007C5FF7 /* ShareMenu */;
+			targetProxy = 254586111D473075007C5FF7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -333,6 +426,14 @@
 				253769E01D30ECD5001482D5 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		2545860D1D473075007C5FF7 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2545860E1D473075007C5FF7 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -488,6 +589,28 @@
 			};
 			name = Release;
 		};
+		254586141D473075007C5FF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ShareMenu/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xl.Study-OC.ShareMenu";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		254586151D473075007C5FF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ShareMenu/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xl.Study-OC.ShareMenu";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -507,6 +630,7 @@
 				253769FD1D30ECD6001482D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		253769FE1D30ECD6001482D5 /* Build configuration list for PBXNativeTarget "Study_OCTests" */ = {
 			isa = XCConfigurationList;
@@ -515,12 +639,22 @@
 				25376A001D30ECD6001482D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		25376A011D30ECD6001482D5 /* Build configuration list for PBXNativeTarget "Study_OCUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				25376A021D30ECD6001482D5 /* Debug */,
 				25376A031D30ECD6001482D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		254586161D473075007C5FF7 /* Build configuration list for PBXNativeTarget "ShareMenu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				254586141D473075007C5FF7 /* Debug */,
+				254586151D473075007C5FF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
