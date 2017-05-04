@@ -25,6 +25,10 @@
 		254586281D47485B007C5FF7 /* ActionMenu.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2545861D1D47485B007C5FF7 /* ActionMenu.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2545862C1D4753DD007C5FF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 253769DD1D30ECD5001482D5 /* Assets.xcassets */; };
 		2545862D1D4753DE007C5FF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 253769DD1D30ECD5001482D5 /* Assets.xcassets */; };
+		25EA6B721EBB22F1008E8EE4 /* RunTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EA6B701EBB22F1008E8EE4 /* RunTimeViewController.m */; };
+		25EA6B731EBB22F1008E8EE4 /* RunTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EA6B711EBB22F1008E8EE4 /* RunTimeViewController.xib */; };
+		25EA6B851EBB2B6C008E8EE4 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EA6B841EBB2B6C008E8EE4 /* Person.m */; };
+		25EA6B881EBB2C01008E8EE4 /* UIImage+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EA6B871EBB2C01008E8EE4 /* UIImage+Image.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +109,13 @@
 		254586201D47485B007C5FF7 /* ActionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionViewController.m; sourceTree = "<group>"; };
 		254586231D47485B007C5FF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		254586251D47485B007C5FF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		25EA6B6F1EBB22F1008E8EE4 /* RunTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunTimeViewController.h; sourceTree = "<group>"; };
+		25EA6B701EBB22F1008E8EE4 /* RunTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunTimeViewController.m; sourceTree = "<group>"; };
+		25EA6B711EBB22F1008E8EE4 /* RunTimeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RunTimeViewController.xib; sourceTree = "<group>"; };
+		25EA6B831EBB2B6C008E8EE4 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		25EA6B841EBB2B6C008E8EE4 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		25EA6B861EBB2C01008E8EE4 /* UIImage+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Image.h"; sourceTree = "<group>"; };
+		25EA6B871EBB2C01008E8EE4 /* UIImage+Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Image.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +193,11 @@
 				25376A051D30F525001482D5 /* FirstViewControllerModel.m */,
 				253769D71D30ECD5001482D5 /* SecondViewController.h */,
 				253769D81D30ECD5001482D5 /* SecondViewController.m */,
+				25EA6B6F1EBB22F1008E8EE4 /* RunTimeViewController.h */,
+				25EA6B701EBB22F1008E8EE4 /* RunTimeViewController.m */,
+				25EA6B711EBB22F1008E8EE4 /* RunTimeViewController.xib */,
 				253769DA1D30ECD5001482D5 /* Main.storyboard */,
+				25EA6B821EBB2B6C008E8EE4 /* Model */,
 				253769DD1D30ECD5001482D5 /* Assets.xcassets */,
 				253769DF1D30ECD5001482D5 /* LaunchScreen.storyboard */,
 				253769E21D30ECD5001482D5 /* Info.plist */,
@@ -237,6 +252,17 @@
 				254586251D47485B007C5FF7 /* Info.plist */,
 			);
 			path = ActionMenu;
+			sourceTree = "<group>";
+		};
+		25EA6B821EBB2B6C008E8EE4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				25EA6B831EBB2B6C008E8EE4 /* Person.h */,
+				25EA6B841EBB2B6C008E8EE4 /* Person.m */,
+				25EA6B861EBB2C01008E8EE4 /* UIImage+Image.h */,
+				25EA6B871EBB2C01008E8EE4 /* UIImage+Image.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				253769E11D30ECD5001482D5 /* LaunchScreen.storyboard in Resources */,
+				25EA6B731EBB22F1008E8EE4 /* RunTimeViewController.xib in Resources */,
 				253769DE1D30ECD5001482D5 /* Assets.xcassets in Resources */,
 				253769DC1D30ECD5001482D5 /* Main.storyboard in Resources */,
 			);
@@ -439,10 +466,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				25376A061D30F525001482D5 /* FirstViewControllerModel.m in Sources */,
+				25EA6B881EBB2C01008E8EE4 /* UIImage+Image.m in Sources */,
 				253769D91D30ECD5001482D5 /* SecondViewController.m in Sources */,
+				25EA6B851EBB2B6C008E8EE4 /* Person.m in Sources */,
 				253769D31D30ECD5001482D5 /* AppDelegate.m in Sources */,
 				253769D61D30ECD5001482D5 /* FirstViewController.m in Sources */,
 				253769D01D30ECD5001482D5 /* main.m in Sources */,
+				25EA6B721EBB22F1008E8EE4 /* RunTimeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,6 +815,7 @@
 				254586151D473075007C5FF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		254586291D47485B007C5FF7 /* Build configuration list for PBXNativeTarget "ActionMenu" */ = {
 			isa = XCConfigurationList;
@@ -793,6 +824,7 @@
 				2545862B1D47485B007C5FF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
