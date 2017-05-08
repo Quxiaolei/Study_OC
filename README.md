@@ -114,6 +114,97 @@ NSLog(@"person.name:%@",p.name);
 字典转Model常用的方法:
  1. 手动赋值
  2. KVC方式转换:但是必须保证model中的属性和字典中的key值一一对应,可以重写`setValue:forUndefinedKey:`方法避免不对应报错
+
+   KVC(`key-value-coding`)即键值编码.KVC需要实现`NSKeyValueCoding`协议,他不通过`setter`和`getter`方法而是使用属性名称字符串(`key`)间接的访问属性.
+
+   常见方法有:`setValue:forKey:`,`setValue:forKeyPath:`(支持内部的点语法访问属性),`valueForKey`,`valueForKeyPath`
+
+   ```objective-c
+   @property (nonatomic,assign) NSInteger index;
+   //KVC设置数据值
+   [self setValue:@1 forKey:@"index"];
+   ```
+   先去类中找有没有`setIndex`方法,若有就直接调用`[self setIndex:value]`,
+
+   去找类中有没有`index`属性,若有直接进行属性赋值`index=value`,
+
+   去找类中有没有`_index`属性,如有直接进行属性赋值`_index=value`,
+
+   找不到就通过`valueForUndefinedKey:`方法报错
+
+   KVO(`key-value-observer`)即键值观察:通过一个`key`值找到某个属性并来监听其值变化,当属性发生变化时会自动通知观察者(观察者记得要在`dealloc`方法中移除)
+
+   ```objective-c
+   //调用
+   NSNumber *num = [NSNumber numberWithDouble:1.3];
+   NSDictionary *dict = @{@"pName":@"张三丰",
+                          @"sex":num,
+                          @"sex1":@YES,
+                          @"dogs":@[@"1",@"2"],
+                          @"dog":@{@"name":@"芝麻",@"age":@10},
+                          @"dogsArray":@[@{@"name":@"芝麻糖",@"age":@20},@{@"name":@"芝麻糊",@"age":@30}],
+                          };
+   Person *p = [Person modelWithDictionary:dict];
+
+   // Person.h
+   //属性多余时不会抛出错误,调用赋值操作时会赋空值
+   @property (nonatomic,copy) NSString *name;
+   @property (nonatomic,copy) NSString *pName;
+   @property (nonatomic,assign) NSInteger sex;
+   @property (nonatomic,assign) BOOL sex1;
+   @property (nonatomic,strong) NSArray *dogs;
+   @property (nonatomic,strong) Dog *dog;
+   @property (nonatomic,strong) NSArray *dogsArray;
+
+   + (instancetype)modelWithDictionary:(NSDictionary *)dict;
+
+   // Person.m
+   // !!!: 使用runtime解析dict为model
+   + (instancetype)modelWithDictionary:(NSDictionary *)dict{
+       id objc = [[self alloc] init];
+       unsigned int count = 0;
+       Ivar *ivarList = class_copyIvarList(self, &count);
+       for (int i = 0; i < count; i++) {
+           Ivar ivar = ivarList[i];
+           //成员变量名
+           NSString *ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
+           NSString *key = [ivarName substringFromIndex:1];
+           //成员变量类型
+           NSString *ivarType = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
+           ivarType = [ivarType stringByReplacingOccurrencesOfString:@"@" withString:@""];
+           ivarType = [ivarType stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+           id value = dict[key];
+
+           if ([value isKindOfClass:[NSDictionary class]]) {
+               Class modelClass = NSClassFromString(ivarType);
+               if (modelClass) {
+                   //对应的model也需要定义此方法,建议使用继承创建自定义model
+                   value = [modelClass modelWithDictionary:value];
+               }
+           }
+
+           if ([value isKindOfClass:[NSArray class]]){
+               NSArray *array = (NSArray *)value;
+               for (int i = 0; i < array.count; i++) {
+                   id dictValue = array[i];
+                   //  TODO: 数组中自定义对象的解析
+                   if ([dictValue isKindOfClass:[NSDictionary class]]) {
+                       NSLog(@"dictValue:%@",dictValue);
+                   }
+               }
+               NSLog(@"");
+           }
+
+           if(value){
+               [objc setValue:value forKey:key];
+           }
+           NSLog(@"key:%@,value:%@,ivarType:%@",key,value,ivarType);
+           NSLog(@"");
+       }
+       return objc;
+   }
+   ```
+
  3. 使用runtime实现
 
 * ##### 动态添加方法
