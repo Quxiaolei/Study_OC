@@ -56,15 +56,31 @@
 
 @implementation Person
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        //log都为Person
+        NSLog(@"%@", NSStringFromClass([self class]));
+        NSLog(@"%@", NSStringFromClass([super class]));
+    }
+    return self;
+}
+
 // !!!: 使用runtime解析dict为model
 + (instancetype)modelWithDictionary:(NSDictionary *)dict{
     id objc = [[self alloc] init];
     unsigned int count = 0;
+    //获取类中所有成员变量
+    //Ivar:成员变量,以下划线开头
+    //Ivar *：指的是存放所有成员变量属性是ivar数组
+    //count: 成员变量个数
     Ivar *ivarList = class_copyIvarList(self, &count);
     for (int i = 0; i < count; i++) {
         Ivar ivar = ivarList[i];
         //成员变量名
         NSString *ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
+        //处理成员变量,去除下划线
         NSString *key = [ivarName substringFromIndex:1];
         //成员变量类型
         NSString *ivarType = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];

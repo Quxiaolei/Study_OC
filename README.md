@@ -1,4 +1,45 @@
 ## runtime
+
+基本概念:
+
+`objc_msgSend`:OC中调用方法,其实就是给某个对象发消息.对象的区分使用消息ID.`IMP`类似函数指针,指向具体的`Method`实现.通过`selector`可以找到对应的`IMP`.
+
+`objc_msgSend()`,`objc_msgSend_stret`,`objc_msgSendSuper`,`objc_msgSendSuper_stret`.含`super`是消息传递给超类,含`stret`的消息返回值是数据结构,不是简单类型
+
+`SEL`:`selector`是方法选择器,表示方法的ID,ID的数据结构是`SEL`.可以在runtime时使用`sel_registerName`创建方法类型.
+
+扩展:
+
+```objective-c
+@implementation Son : NSObject
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        NSLog(@"%@", NSStringFromClass([self class]));
+        NSLog(@"%@", NSStringFromClass([super class]));
+    }
+    return self;
+}
+@end
+//输出log:Son
+```
+`super`只是一个编译器指示符,当编译器看到`super`时会让当前对象去调用其父类的方法.实质上还是当前对象在调用
+
+`[self class]`对应`id objc_msgSend(id self, SEL op, ...)`,
+
+`[super class]`对应`id objc_msgSendSuper(struct objc_super *super, SEL op, ...)`,
+```objective-c
+struct objc_super {
+ //receiver 代表当前对象,也就是self
+ __unsafe_unretained id receiver;
+ //记录当前类的父类
+ __unsafe_unretained Class super_class;
+ };
+ ```
+调用时,从当前类的父类查找方法,找到方法后内部使用` objc_msgSend(objc_super->receiver, @selector(class))`
+
+
 #### 1. runtime的常见使用
 
 使用时需要先导入`#import <objc/message.h>`
@@ -9,6 +50,10 @@
  `class_getInstanceMethod`:获取实例方法
 
  `method_exchangeImplementations`:交换方法实现
+
+`class_addMethod(<#__unsafe_unretained Class cls#>, <#SEL name#>, <#IMP imp#>, <#const char *types#>)`:增加方法
+
+`class_replaceMethod(<#__unsafe_unretained Class cls#>, <#SEL name#>, <#IMP imp#>, <#const char *types#>)`:替换方法实现,`class_replaceMethod(toolClass, cusSEL, method_getImplementation(oriMethod), method_getTypeEncoding(oriMethod))`
 
 ```objective-c
 - (void)viewDidLoad {
@@ -134,78 +179,102 @@ NSLog(@"person.name:%@",p.name);
 
    KVO(`key-value-observer`)即键值观察:通过一个`key`值找到某个属性并来监听其值变化,当属性发生变化时会自动通知观察者(观察者记得要在`dealloc`方法中移除)
 
-   ```objective-c
-   //调用
-   NSNumber *num = [NSNumber numberWithDouble:1.3];
-   NSDictionary *dict = @{@"pName":@"张三丰",
-                          @"sex":num,
-                          @"sex1":@YES,
-                          @"dogs":@[@"1",@"2"],
-                          @"dog":@{@"name":@"芝麻",@"age":@10},
-                          @"dogsArray":@[@{@"name":@"芝麻糖",@"age":@20},@{@"name":@"芝麻糊",@"age":@30}],
-                          };
-   Person *p = [Person modelWithDictionary:dict];
+ 3. 使用runtime实现(**** MJExtension ****)
 
-   // Person.h
-   //属性多余时不会抛出错误,调用赋值操作时会赋空值
-   @property (nonatomic,copy) NSString *name;
-   @property (nonatomic,copy) NSString *pName;
-   @property (nonatomic,assign) NSInteger sex;
-   @property (nonatomic,assign) BOOL sex1;
-   @property (nonatomic,strong) NSArray *dogs;
-   @property (nonatomic,strong) Dog *dog;
-   @property (nonatomic,strong) NSArray *dogsArray;
+     利用运行时特性,遍历模型的所有属性.根据属性名称在数据中查找`key`对应的值,并给属性赋值.
 
-   + (instancetype)modelWithDictionary:(NSDictionary *)dict;
+     主要存在的特殊情况:模型的属性和数据中的`key`值不对应(模型属性值在数据中找不到对应值会抛出异常,需要手动调用`setValue:forUndefinedKey:`处理),模型的嵌套,数组中元素为模型
 
-   // Person.m
-   // !!!: 使用runtime解析dict为model
-   + (instancetype)modelWithDictionary:(NSDictionary *)dict{
-       id objc = [[self alloc] init];
-       unsigned int count = 0;
-       Ivar *ivarList = class_copyIvarList(self, &count);
-       for (int i = 0; i < count; i++) {
-           Ivar ivar = ivarList[i];
-           //成员变量名
-           NSString *ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
-           NSString *key = [ivarName substringFromIndex:1];
-           //成员变量类型
-           NSString *ivarType = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
-           ivarType = [ivarType stringByReplacingOccurrencesOfString:@"@" withString:@""];
-           ivarType = [ivarType stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-           id value = dict[key];
+     `class_copyIvarList`:获取类中所有属性和变量(以下划线开头)
 
-           if ([value isKindOfClass:[NSDictionary class]]) {
-               Class modelClass = NSClassFromString(ivarType);
-               if (modelClass) {
-                   //对应的model也需要定义此方法,建议使用继承创建自定义model
-                   value = [modelClass modelWithDictionary:value];
-               }
-           }
+     `class_copyPropertyList`:获取类的所有属性
 
-           if ([value isKindOfClass:[NSArray class]]){
-               NSArray *array = (NSArray *)value;
-               for (int i = 0; i < array.count; i++) {
-                   id dictValue = array[i];
-                   //  TODO: 数组中自定义对象的解析
-                   if ([dictValue isKindOfClass:[NSDictionary class]]) {
-                       NSLog(@"dictValue:%@",dictValue);
-                   }
-               }
-               NSLog(@"");
-           }
+     `class_copyMethodList`:获取方法列表
 
-           if(value){
-               [objc setValue:value forKey:key];
-           }
-           NSLog(@"key:%@,value:%@,ivarType:%@",key,value,ivarType);
-           NSLog(@"");
-       }
-       return objc;
-   }
-   ```
+     `class_copyProtocolList`:获取协议列表
 
- 3. 使用runtime实现
+     `Ivar`:成员变量(以下划线开头)和属性
+
+     `ivar_getName`:获取成员变量名
+
+     `property_getName`:获取属性名
+
+     `protocol_getName`:获取协议名
+
+ ```objective-c
+ //调用
+ NSNumber *num = [NSNumber numberWithDouble:1.3];
+ NSDictionary *dict = @{@"pName":@"张三丰",
+                        @"sex":num,
+                        @"sex1":@YES,
+                        @"dogs":@[@"1",@"2"],
+                        @"dog":@{@"name":@"芝麻",@"age":@10},
+                        @"dogsArray":@[@{@"name":@"芝麻糖",@"age":@20},@{@"name":@"芝麻糊",@"age":@30}],
+                        };
+ Person *p = [Person modelWithDictionary:dict];
+
+ // Person.h
+ //属性多余时不会抛出错误,调用赋值操作时会赋空值
+ @property (nonatomic,copy) NSString *name;
+ @property (nonatomic,copy) NSString *pName;
+ @property (nonatomic,assign) NSInteger sex;
+ @property (nonatomic,assign) BOOL sex1;
+ @property (nonatomic,strong) NSArray *dogs;
+ @property (nonatomic,strong) Dog *dog;
+ @property (nonatomic,strong) NSArray *dogsArray;
+
+ + (instancetype)modelWithDictionary:(NSDictionary *)dict;
+
+ // Person.m
+ // !!!: 使用runtime解析dict为model
+ + (instancetype)modelWithDictionary:(NSDictionary *)dict{
+     id objc = [[self alloc] init];
+     unsigned int count = 0;
+     //获取类中所有成员变量
+     //Ivar:成员变量,以下划线开头
+     //Ivar *：指的是存放所有成员变量属性是ivar数组
+     //count: 成员变量个数
+     Ivar *ivarList = class_copyIvarList(self, &count);
+     for (int i = 0; i < count; i++) {
+         Ivar ivar = ivarList[i];
+         //成员变量名
+         NSString *ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
+         NSString *key = [ivarName substringFromIndex:1];
+         //成员变量类型
+         NSString *ivarType = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];
+         ivarType = [ivarType stringByReplacingOccurrencesOfString:@"@" withString:@""];
+         ivarType = [ivarType stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+         id value = dict[key];
+
+         if ([value isKindOfClass:[NSDictionary class]]) {
+             Class modelClass = NSClassFromString(ivarType);
+             if (modelClass) {
+                 //对应的model也需要定义此方法,建议使用继承创建自定义model
+                 value = [modelClass modelWithDictionary:value];
+             }
+         }
+
+         if ([value isKindOfClass:[NSArray class]]){
+             NSArray *array = (NSArray *)value;
+             for (int i = 0; i < array.count; i++) {
+                 id dictValue = array[i];
+                 //  TODO: 数组中自定义对象的解析
+                 if ([dictValue isKindOfClass:[NSDictionary class]]) {
+                     NSLog(@"dictValue:%@",dictValue);
+                 }
+             }
+             NSLog(@"");
+         }
+
+         if(value){
+             [objc setValue:value forKey:key];
+         }
+         NSLog(@"key:%@,value:%@,ivarType:%@",key,value,ivarType);
+         NSLog(@"");
+     }
+     return objc;
+ }
+ ```
 
 * ##### 动态添加方法
 当一个类中方法特别多,加载类文件到内存中就会比较耗时,耗费资源.我们可以动态添加方法节省内存资源,真正的实现`懒加载`
@@ -266,6 +335,10 @@ void runMethod(id self, SEL _cmd, NSNumber *meter) {
 ```
 
 #### 2.总览
+
+runtime的使用场景:
+
+[Runtime Method Swizzling开发实例汇总（持续更新中）](http://www.jianshu.com/p/f6dad8e1b848)
 
 ##### Extensions:
 
